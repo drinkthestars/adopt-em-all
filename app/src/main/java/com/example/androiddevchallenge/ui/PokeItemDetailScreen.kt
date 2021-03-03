@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.androiddevchallenge.entity
+package com.example.androiddevchallenge.ui
 
-import com.example.androiddevchallenge.data.Type
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.example.androiddevchallenge.entity.PokeItemDetail
 
-data class PokeItemDetail(
-    val pokeItem: PokeItem,
-    val bio: String,
-    val shareUrl: String
-)
-
-data class PokeItem(
-    val id: Int,
-    val name: String,
-    val pokedexColor: Long,
-    val types: List<Type>,
-    val imageUrl: String,
-    val height: String,
-    val weight: String
-)
+@Composable
+fun PokeItemDetail(pokeItemDetail: PokeItemDetail) {
+    Box(Modifier.fillMaxSize()) {
+    }
+}

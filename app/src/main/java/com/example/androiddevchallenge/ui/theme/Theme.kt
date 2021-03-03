@@ -15,16 +15,21 @@
  */
 package com.example.androiddevchallenge.ui.theme
 
+import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
 private val DarkColorPalette = darkColors(
     primary = purple200,
-    primaryVariant = purple700,
+    primaryVariant = navy,
     secondary = teal200,
     background = navy,
     surface = navyMed,
@@ -36,7 +41,7 @@ private val DarkColorPalette = darkColors(
 
 private val LightColorPalette = lightColors(
     primary = purple500,
-    primaryVariant = purple700,
+    primaryVariant = navy,
     secondary = teal200,
     background = navy,
     surface = navyMed,
@@ -47,11 +52,25 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun MyTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
+fun PokeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
+    }
+
+    val view = LocalView.current
+    val window = (LocalContext.current as Activity).window
+    window.statusBarColor = colors.primary.value.toInt()
+    window.navigationBarColor = colors.primary.value.toInt()
+
+    val insetsController = remember(view, window) {
+        WindowCompat.getInsetsController(window, view)
+    }
+
+    insetsController?.run {
+        isAppearanceLightNavigationBars = !darkTheme
+        isAppearanceLightStatusBars = !darkTheme
     }
 
     MaterialTheme(

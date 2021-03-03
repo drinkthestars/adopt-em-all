@@ -1,7 +1,23 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.example.androiddevchallenge.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -30,52 +46,56 @@ import androidx.compose.ui.unit.sp
 import com.example.androiddevchallenge.data.Type
 import com.example.androiddevchallenge.entity.PokeItem
 import com.example.androiddevchallenge.ui.theme.canary
-import com.example.androiddevchallenge.ui.theme.navyLight
 import dev.chrisbanes.accompanist.coil.CoilImage
 
-@OptIn(ExperimentalStdlibApi::class)
 @Composable
-fun PokeListItem(pokeItem: PokeItem) {
+fun PokeListItem(pokeItem: PokeItem, onClick: (PokeItem) -> Unit) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxWidth(0.9f).wrapContentHeight()
     ) {
-        PokemonInfoCard(pokeItem)
+        PokemonInfoCard(pokeItem, onClick)
         PokemonImageOverlay(pokeItem)
     }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 @Composable
-private fun BoxScope.PokemonInfoCard(pokeItem: PokeItem) {
+private fun BoxScope.PokemonInfoCard(pokeItem: PokeItem, onClick: (PokeItem) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth(0.83f)
             .wrapContentHeight()
             .padding(vertical = 16.dp, horizontal = 12.dp)
-            .align(Alignment.BottomCenter),
+            .align(Alignment.BottomCenter)
+            .clickable { onClick(pokeItem) },
         shape = RoundedCornerShape(42.dp),
         elevation = 6.dp
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(32.dp),
-            verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(60.dp))
-            Text(
-                text = pokeItem.name.uppercase(),
-                style = MaterialTheme.typography.h5,
-                letterSpacing = 4.sp
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Row { pokeItem.types.forEach { TypeBubble(it) } }
-            Spacer(modifier = Modifier.height(40.dp))
-            Row {
-                PropertiesColumn("Height", pokeItem.height)
-                Spacer(modifier = Modifier.fillMaxWidth(0.34f))
-                PropertiesColumn("Weight", pokeItem.weight)
-            }
+        PokemonInfoColumn(pokeItem)
+    }
+}
+
+@OptIn(ExperimentalStdlibApi::class)
+@Composable
+private fun PokemonInfoColumn(pokeItem: PokeItem) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(32.dp),
+        verticalArrangement = Arrangement.SpaceAround,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(60.dp))
+        Text(
+            text = pokeItem.name.uppercase(),
+            style = MaterialTheme.typography.h5,
+            letterSpacing = 4.sp
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row { pokeItem.types.forEach { TypeBubble(it) } }
+        Spacer(modifier = Modifier.height(52.dp))
+        Row {
+            PropertiesColumn("Height", pokeItem.height)
+            Spacer(modifier = Modifier.fillMaxWidth(0.34f))
+            PropertiesColumn("Weight", pokeItem.weight)
         }
     }
 }
@@ -93,7 +113,7 @@ private fun PokemonImageOverlay(pokeItem: PokeItem) {
                 contentDescription = pokeItem.name,
                 fadeIn = true
             )
-            Spacer(modifier = Modifier.height(230.dp))
+            Spacer(modifier = Modifier.height(250.dp))
         }
     }
 }
